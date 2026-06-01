@@ -1,0 +1,110 @@
+:root {
+    --bg-dark: #0a0a0a;
+    --accent: #00f2fe;
+    --text-main: #ffffff;
+    --card-bg: #1a1a1a;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    scroll-behavior: smooth;
+}
+
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #00f2fe, #4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 50px 0;
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 10%;
+}
+
+.skill-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    width: 120px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #333;
+}
+
+.skill-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px var(--accent);
+}
+
+.skill-card i {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+    color: var(--accent);
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 0 10% 100px;
+}
+
+.project-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.project-card .thumb {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-color: #333; /* Fallback */
+}
+
+.project-info {
+    padding: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 50px;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--accent);
+    color: #000;
+}
