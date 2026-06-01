@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="hero">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1><%= name %></h1>
+            <p class="subtitle"><%= role %></p>
+            <a href="#projects" class="btn">View My Work</a>
+        </div>
+    </header>
+
+    <section id="skills">
+        <h2 class="section-title">My Arsenal</h2>
+        <div class="skills-grid">
+            <% skills.forEach(skill => { %>
+                <div class="skill-card">
+                    <i class="<%= skill.icon %>"></i>
+                    <span><%= skill.name %></span>
+                </div>
+            <% }) %>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="project-grid">
+            <% projects.forEach(project => { %>
+                <div class="project-card">
+                    <div class="thumb" style="background-image: url('<%= project.image %>')"></div>
+                    <div class="project-info">
+                        <h3><%= project.title %></h3>
+                        <p><%= project.desc %></p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 <%= name %> - Built with Node, Express & EJS</p>
+    </footer>
+</body>
+</html>
