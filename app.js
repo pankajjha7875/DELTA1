@@ -4,38 +4,13 @@ const path = require('path');
 const app = express();
 
 // Middleware
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Mock Data (In a real app, you would fetch this from MongoDB)
-const skills = [
-    { name: 'HTML', icon: 'fab fa-html5' },
-    { name: 'CSS', icon: 'fab fa-css3-alt' },
-    { name: 'JavaScript', icon: 'fab fa-js' },
-    { name: 'Node.js', icon: 'fab fa-node-js' },
-    { name: 'Express', icon: 'fas fa-server' },
-    { name: 'EJS', icon: 'fas fa-code' },
-    { name: 'SQL', icon: 'fas fa-database' },
-    { name: 'MongoDB', icon: 'fas fa-leaf' },
-    { name: 'React', icon: 'fab fa-react' },
-    { name: 'Git/GitHub', icon: 'fab fa-github' }
-];
-
-const projects = [
-    { title: 'Stone Paper Scissors', image: '/images/game.jpg', desc: 'Interactive JS Game' },
-    { title: 'Database System', image: '/images/db.jpg', desc: 'Relational Management Tool' },
-    { title: 'E-Commerce Web', image: '/images/shop.jpg', desc: 'Full-stack Shopping Experience' },
-    { title: 'Todo Game', image: '/images/todo.jpg', desc: 'Gamified Task Manager' }
-];
+app.use(express.urlencoded({ extended: true })); // Middleware to parse form data
+app.use(express.json()); // Middleware to parse JSON data
+app.use(express.static(path.join(__dirname))); // Serve all static files from root
 
 // Routes
 app.get('/', (req, res) => {
-    res.render('index', { 
-        name: 'Pankaj Jha', 
-        role: 'BCA Student & Developer',
-        skills, 
-        projects 
-    });
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Database Connection (Mongoose Example)
