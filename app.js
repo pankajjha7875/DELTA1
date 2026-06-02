@@ -21,6 +21,10 @@ app.get('/database-system', (req, res) => {
     res.sendFile(path.join(__dirname, 'database.html'));
 });
 
+app.get('/ecommerce', (req, res) => {
+    res.sendFile(path.join(__dirname, 'ecommerce.html'));
+});
+
 // Database Connection (Mongoose Example)
 
 mongoose.connect('mongodb://localhost:27017/portfolio')
