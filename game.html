@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stone Paper Scissors</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="game-body">
+    <div class="game-container">
+        <h1 class="section-title">Stone Paper Scissors</h1>
+        
+        <div class="game-choices">
+            <button class="choice-btn" onclick="play('stone')">🪨 Stone</button>
+            <button class="choice-btn" onclick="play('paper')">📄 Paper</button>
+            <button class="choice-btn" onclick="play('scissors')">✂️ Scissors</button>
+        </div>
+
+        <div class="score-board">
+            <p>User Choice: <span id="user-display">-</span></p>
+            <p>Computer Choice: <span id="comp-display">-</span></p>
+        </div>
+
+        <h2 id="game-result">Choose your move to start!</h2>
+        
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+
+    <script>
+        function play(userChoice) {
+            const choices = ['stone', 'paper', 'scissors'];
+            const compChoice = choices[Math.floor(Math.random() * 3)];
+
+            document.getElementById('user-display').innerText = userChoice.toUpperCase();
+            document.getElementById('comp-display').innerText = compChoice.toUpperCase();
+
+            let result = "";
+            if (userChoice === compChoice) {
+                result = "It's a Tie! 🤝";
+            } else if (
+                (userChoice === 'stone' && compChoice === 'scissors') ||
+                (userChoice === 'paper' && compChoice === 'stone') ||
+                (userChoice === 'scissors' && compChoice === 'paper')
+            ) {
+                result = "You Win! 🎉";
+            } else {
+                result = "You Lose! 💀";
+            }
+            document.getElementById('game-result').innerText = result;
+        }
+    </script>
+</body>
+</html>
