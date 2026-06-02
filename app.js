@@ -13,6 +13,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/stone-paper-scissors', (req, res) => {
+    res.sendFile(path.join(__dirname, 'game.html'));
+});
+
 // Database Connection (Mongoose Example)
 /*
 mongoose.connect('mongodb://localhost:27017/portfolio')
