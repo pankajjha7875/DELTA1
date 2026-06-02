@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Game | Level Up Your Life</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .stats-container { background: #111; padding: 20px; border-radius: 15px; margin-bottom: 30px; border: 1px solid var(--accent); }
+        .progress-bar { width: 100%; height: 10px; background: #333; border-radius: 5px; margin-top: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: var(--accent); transition: 0.5s ease; box-shadow: 0 0 10px var(--accent); }
+        
+        .todo-input-group { display: flex; gap: 10px; margin-bottom: 30px; }
+        .todo-list { list-style: none; padding: 0; }
+        .todo-item { 
+            background: var(--card-bg); 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-left: 4px solid var(--accent);
+            animation: slideIn 0.3s ease forwards;
+        }
+        .todo-item.completed { opacity: 0.6; border-left-color: #555; text-decoration: line-through; }
+        
+        .action-btns { display: flex; gap: 10px; }
+        .check-btn { color: #00ff88; cursor: pointer; font-size: 1.2rem; }
+        .del-btn { color: #ff4444; cursor: pointer; font-size: 1.2rem; }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body class="game-body">
+    <div class="game-container">
+        <h1 class="section-title">Quest Log</h1>
+        
+        <div class="stats-container">
+            <div style="display: flex; justify-content: space-between;">
+                <span>Level: <span id="level">1</span></span>
+                <span>XP: <span id="xp">0</span>/100</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="xp-fill"></div>
+            </div>
+        </div>
+
+        <div class="todo-input-group">
+            <input type="text" id="quest-input" placeholder="Enter new quest..." class="db-input" style="flex: 1;">
+            <button class="choice-btn" onclick="addQuest()" style="padding: 10px 20px;">Accept</button>
+        </div>
+
+        <ul class="todo-list" id="quest-list">
+            <!-- Quests will appear here -->
+        </ul>
+
+        <a href="./index.html" class="btn">Return to Base</a>
+    </div>
+
+    <script>
+        let xp = 0;
+        let level = 1;
+
+        function updateStats(points) {
+            xp += points;
+            if (xp >= 100) {
+                xp = xp - 100;
+                level++;
+                alert("LEVEL UP! You are now Level " + level);
+            }
+            document.getElementById('xp').innerText = xp;
+            document.getElementById('level').innerText = level;
+            document.getElementById('xp-fill').style.width = xp + "%";
+        }
+
+        function addQuest() {
+            const input = document.getElementById('quest-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const list = document.getElementById('quest-list');
+            const li = document.createElement('li');
+            li.className = 'todo-item';
+            li.innerHTML = `
+                <span>${text}</span>
+                <div class="action-btns">
+                    <i class="fas fa-check-circle check-btn" onclick="completeQuest(this)"></i>
+                    <i class="fas fa-trash del-btn" onclick="this.parentElement.parentElement.remove()"></i>
+                </div>
+            `;
+            list.appendChild(li);
+            input.value = '';
+        }
+
+        function completeQuest(btn) {
+            const item = btn.parentElement.parentElement;
+            if (!item.classList.contains('completed')) {
+                item.classList.add('completed');
+                updateStats(25); // Earn 25 XP per quest
+                btn.style.display = 'none';
+            }
+        }
+
+        // Allow Enter key to add quest
+        document.getElementById('quest-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') addQuest();
+        });
+    </script>
+</body>
+</html>

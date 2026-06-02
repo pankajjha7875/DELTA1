@@ -25,6 +25,10 @@ app.get('/ecommerce', (req, res) => {
     res.sendFile(path.join(__dirname, 'ecommerce.html'));
 });
 
+app.get('/todo-game', (req, res) => {
+    res.sendFile(path.join(__dirname, 'todo.html'));
+});
+
 // Database Connection (Mongoose Example)
 
 mongoose.connect('mongodb://localhost:27017/portfolio')
