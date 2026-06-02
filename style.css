@@ -160,3 +160,18 @@ body {
     color: #000;
     transform: translateY(-5px);
 }
+
+/* Bio Section Styles */
+.about-section {
+    padding: 80px 10%;
+    background: linear-gradient(180deg, #0a0a0a 0%, #111 100%);
+    text-align: center;
+}
+
+.bio-text {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #b0b0b0;
+}
