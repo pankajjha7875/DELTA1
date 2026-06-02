@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database System | Project</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a1a1a; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        th { background: #222; color: var(--accent); }
+        .db-controls { margin-top: 20px; display: flex; gap: 10px; justify-content: center; }
+        .db-input { padding: 12px; border-radius: 10px; border: 1px solid #444; background: #222; color: #fff; outline: none; transition: 0.3s; }
+        .db-input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+    </style>
+</head>
+<body class="game-body">
+    <div class="game-container">
+        <h1 class="section-title">Database System</h1>
+        <p>A mock-up of your Relational Management Tool interface.</p>
+        
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Entry ID</th>
+                    <th>Record Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#001</td>
+                    <td>Stone Paper Scissors</td>
+                    <td>Active</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="db-controls">
+            <input type="text" id="record-input" placeholder="Enter record name..." class="db-input">
+            <button class="choice-btn" onclick="addRecord()">Add Record</button>
+        </div>
+        
+        <a href="./index.html" class="btn">Back to Portfolio</a>
+    </div>
+
+    <script>
+        function addRecord() {
+            const input = document.getElementById('record-input');
+            const recordName = input.value.trim();
+            
+            if (!recordName) return alert("Please enter a record name!");
+
+            const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            const id = Math.floor(Math.random() * 900) + 100;
+            newRow.innerHTML = `
+                <td>#${id}</td>
+                <td>${recordName}</td>
+                <td style="color: var(--accent)">Synchronizing</td>
+            `;
+            input.value = ''; // Clear input field after adding
+        }
+    </script>
+</body>
+</html>

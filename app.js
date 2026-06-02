@@ -17,6 +17,10 @@ app.get('/stone-paper-scissors', (req, res) => {
     res.sendFile(path.join(__dirname, 'game.html'));
 });
 
+app.get('/database-system', (req, res) => {
+    res.sendFile(path.join(__dirname, 'database.html'));
+});
+
 // Database Connection (Mongoose Example)
 
 mongoose.connect('mongodb://localhost:27017/portfolio')
