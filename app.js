@@ -37,8 +37,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/portfolio')
 const contactSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
-    message: { type: String, required: true },
-    date: { type: Date, default: Date.now }
+    message: { type: String, required: true }
 });
 const Contact = mongoose.model('Contact', contactSchema);
 
