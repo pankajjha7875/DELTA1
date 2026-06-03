@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
     <header class="hero">
         <div class="hero-content">
             <h1>Pankaj Jha</h1>
@@ -32,17 +41,24 @@
 
     <section id="skills">
         <h2 class="section-title">My Arsenal</h2>
+        <div class="container" style="max-width: 900px; margin: 0 auto 50px auto; text-align: center;">
+            <p class="bio-text">
+                My developer toolkit is built on a foundation of core web technologies and modern frameworks. I specialize in creating interactive user interfaces and robust backend systems, leveraging a wide range of tools to build modern, high-performance applications. Click on any skill card below to open its official documentation and learn more about its technical specifications and usage.
+            </p>
+        </div>
         <div class="skills-grid">
-            <div class="skill-card"><i class="fab fa-html5"></i><span>HTML</span></div>
-            <div class="skill-card"><i class="fab fa-css3-alt"></i><span>CSS</span></div>
-            <div class="skill-card"><i class="fab fa-js"></i><span>JavaScript</span></div>
-            <div class="skill-card"><i class="fab fa-node-js"></i><span>Node.js</span></div>
-            <div class="skill-card"><i class="fas fa-server"></i><span>Express</span></div>
-            <div class="skill-card"><i class="fas fa-code"></i><span>Node EJS</span></div>
-            <div class="skill-card"><i class="fas fa-database"></i><span>SQL</span></div>
-            <div class="skill-card"><i class="fas fa-leaf"></i><span>MongoDB</span></div>
-            <div class="skill-card"><i class="fab fa-react"></i><span>React</span></div>
-            <div class="skill-card"><i class="fab fa-github"></i><span>GitHub</span></div>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about HTML"><i class="fab fa-html5"></i><span>HTML</span></a>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about CSS"><i class="fab fa-css3-alt"></i><span>CSS</span></a>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about JavaScript"><i class="fab fa-js"></i><span>JavaScript</span></a>
+            <a href="https://nodejs.org/docs/latest/api/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about Node.js"><i class="fab fa-node-js"></i><span>Node.js</span></a>
+            <a href="https://expressjs.com/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about Express"><i class="fas fa-server"></i><span>Express</span></a>
+            <a href="https://ejs.co/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about Node EJS"><i class="fas fa-code"></i><span>Node EJS</span></a>
+            <a href="https://www.w3schools.com/sql/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about SQL"><i class="fas fa-database"></i><span>SQL</span></a>
+            <a href="https://www.mongodb.com/docs/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about MongoDB"><i class="fas fa-leaf"></i><span>MongoDB</span></a>
+            <a href="https://react.dev/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about React"><i class="fab fa-react"></i><span>React</span></a>
+            <a href="https://docs.github.com/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about GitHub"><i class="fab fa-github"></i><span>GitHub</span></a>
+            <a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about C"><i class="fas fa-code"></i><span>C</span></a>
+            <a href="https://en.cppreference.com/w/cpp" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about C++"><i class="fas fa-code"></i><span>C++</span></a>
         </div>
     </section>
 
@@ -87,9 +103,18 @@
             </a>
         </div>
     </section>
-
-    <section id="contact" class="contact-section">
+<section id="contact" class="contact-section">
         <h2 class="section-title">Get In Touch</h2>
+        <div class="container" style="max-width: 600px; width: 100%; margin-bottom: 40px;">
+            <form id="contactForm" style="display: flex; flex-direction: column; gap: 15px;">
+                <input type="text" name="name" placeholder="Your Name" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;">
+                <input type="email" name="email" placeholder="Your Email" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;">
+                <textarea name="message" placeholder="Describe your project..." rows="5" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;"></textarea>
+                <button type="submit" class="btn" style="cursor: pointer; align-self: center;">Initiate Contact</button>
+            </form>
+            <div id="formStatus" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
+        </div>
+
         <div class="contact-links">
             <a href="https://github.com/pankajjha7875" target="_blank" class="btn"><i class="fab fa-github"></i> GitHub</a>
             <a href="mailto:pankajjha7870@gmail.com" class="btn"><i class="fas fa-envelope"></i> Email</a>
@@ -101,5 +126,40 @@
         <p>&copy; 2024 Pankaj Jha - Built with Node, HTML & CSS</p>
     </footer>
     <a href="http://www.somesite.com"><img src="http://www.example.com/logo.jpg" alt="Logo"></a>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const status = document.getElementById('formStatus');
+            const formData = {
+                name: e.target.name.value,
+                email: e.target.email.value,
+                message: e.target.message.value
+            };
+
+            status.innerText = "Transmitting...";
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    status.style.color = "var(--accent)";
+                    status.innerText = "Message received and stored in database.";
+                    e.target.reset();
+                }
+            } catch (err) {
+                status.style.color = "#ff4b2b";
+                status.innerText = "Transmission failed. Is the server running?";
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Pankaj Jha - Built with Node, HTML & CSS</p>
+    </footer>
 </body>
 </html>

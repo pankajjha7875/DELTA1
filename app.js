@@ -29,14 +29,17 @@ app.get('/todo-game', (req, res) => {
     res.sendFile(path.join(__dirname, 'todo.html'));
 });
 
-// Database Connection (Mongoose Example)
+mongoose.connect('mongodb://127.0.0.1:27017/portfolio')
+    .then(() => console.log('Connected to MongoDB Successfully'))
+    .catch(err => console.error('Database Connection Error:', err));
 
 mongoose.connect('mongodb://127.0.0.1:27017/portfolio')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error(err));
 
+// Start the server
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Cinematic Portfolio running on http://localhost:${PORT}`);
+    console.log(`Cinematic Portfolio running on http://localhost:${PORT|8080}`);
 });
