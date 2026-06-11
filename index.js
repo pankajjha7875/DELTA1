@@ -2,10 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const Contact = require('./Contact');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
+const contactSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    message: { type: String, required: true },
+}, { timestamps: true });
+const Contact = mongoose.model('Contact', contactSchema);
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
