@@ -4,22 +4,26 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// 1. Database Schema & Model
 const contactSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
     message: { type: String, required: true },
 }, { timestamps: true });
+
 const Contact = mongoose.model('Contact', contactSchema);
 
-// Middleware
+// 2. Middleware Stack
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 /** 
- * Security Improvement: Move frontend files to a 'public' directory.
- * This prevents sensitive server-side files (like .env) from being served.
+ * Note: Currently serving from root. For better security later, 
+ * move your .html/.css files to a 'public' folder.
  */
 app.use(express.static(__dirname));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
 // Simple Request Logger
 app.use((req, res, next) => {
@@ -27,7 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes
+// 3. Page Routes
 app.get(['/', '/index.html'], (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -45,7 +49,7 @@ Object.entries(pages).forEach(([route, file]) => {
     app.get(route, (req, res) => {
         const filePath = path.join(__dirname, file);
         res.sendFile(filePath, (err) => {
-            if (err) {
+            if (err && !res.headersSent) {
                 console.error(`Error serving ${file}:`, err.message);
                 res.status(404).send('Page not found');
             }
@@ -53,24 +57,29 @@ Object.entries(pages).forEach(([route, file]) => {
     });
 });
 
-// Database Connection (Mongoose Example)
+// 4. Database Connection
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-    console.warn('WARNING: MONGODB_URI is not defined in .env. Falling back to local default.');
-}
-
 const connectDB = async () => {
-    try {
-        await mongoose.connect(MONGODB_URI || "mongodb://localhost:27017/delta1");
-        console.log('Connected to MongoDB Successfully');
-    } catch (err) {
-        console.error('Database connection error:', err.message);
+    if (!MONGODB_URI) {
+        console.error('❌ ERROR: MONGODB_URI is not defined in environment variables.');
+        if (process.env.NODE_ENV === 'production') process.exit(1);
+        return;
     }
-}
+    try {
+        await mongoose.connect(MONGODB_URI);
+        console.log('✅ Connected to MongoDB Successfully');
+    } catch (err) {
+        console.error('❌ Database connection error:', err.message);
+        if (process.env.NODE_ENV === 'production') {
+            process.exit(1);
+        }
+    }
+};
+
 connectDB();
 
-// API Route for Contact Form
+// 5. API Routes
 app.post('/api/contact', async (req, res) => {
     try {
         const { name, email, message } = req.body;
@@ -129,7 +138,16 @@ app.delete('/api/admin/messages/:id', adminAuth, async (req, res) => {
     }
 });
 
-// Start the server
+// 6. Global Error Handler
+app.use((err, req, res, next) => {
+    console.error(`[Error] ${err.stack}`);
+    res.status(500).json({
+        success: false,
+        message: 'An internal server error occurred.'
+    });
+});
+
+// 7. Start the server
 const server = app.listen(PORT, () => {
     console.log(`Server live at: http://localhost:${PORT}`);
 });
