@@ -351,3 +351,22 @@ footer {
     text-align: left;
     padding: 40px 0;
 }
+
+/* Planet Popup Styles */
+#planet-popup {
+    position: fixed;
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid var(--accent);
+    color: var(--text-main);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 20px var(--water-shadow);
+    transition: opacity 0.3s;
+    display: none;
+    opacity: 0;
+    transform: translateX(-50%);
+}

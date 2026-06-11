@@ -19,6 +19,7 @@
         </defs>
     </svg>
 
+    <div id="planet-popup"></div>
     <canvas id="bg-canvas"></canvas>
     <nav class="navbar">
         <div class="nav-container">
@@ -186,11 +187,12 @@
         
         let width, height, stars = [];
         let planets = [
-            { dist: 200, size: 15, speed: 0.001, color: '#4facfe', angle: 0 },
-            { dist: 350, size: 25, speed: 0.0005, color: '#f43f5e', angle: 0 },
-            { dist: 500, size: 20, speed: 0.0003, color: '#fbbf24', angle: 0 }
+            { name: "Stone Paper Scissors", dist: 200, size: 15, speed: 0.001, color: '#4facfe', angle: 0, rx: 0, ry: 0 },
+            { name: "E-Commerce Web", dist: 350, size: 25, speed: 0.0005, color: '#f43f5e', angle: 0, rx: 0, ry: 0 },
+            { name: "Canvas Sketchpad", dist: 500, size: 20, speed: 0.0003, color: '#fbbf24', angle: 0, rx: 0, ry: 0 }
         ];
         let mouseX = 0, mouseY = 0;
+        let popupTimeout;
         const STAR_COUNT = 400;
         const ACCENT_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#fbbf24';
 
@@ -258,6 +260,9 @@
                 const px = Math.cos(currentAngle) * p.dist - mouseX;
                 const py = Math.sin(currentAngle) * (p.dist * 0.4) - mouseY; // Elliptical orbit
                 
+                p.rx = px; // Store screen coordinates for click detection
+                p.ry = py;
+
                 // Planet Shadow/Glow
                 ctx.shadowBlur = 15;
                 ctx.shadowColor = p.color;
@@ -282,9 +287,42 @@
             requestAnimationFrame(draw);
         }
 
+        function showPlanetPopup(name, x, y) {
+            const popup = document.getElementById('planet-popup');
+            popup.innerText = name;
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y - 50}px`;
+            popup.style.display = 'block';
+            setTimeout(() => popup.style.opacity = '1', 10);
+
+            clearTimeout(popupTimeout);
+            popupTimeout = setTimeout(() => {
+                popup.style.opacity = '0';
+                setTimeout(() => popup.style.display = 'none', 300);
+            }, 2000);
+        }
+
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX - width / 2) * 0.1;
             mouseY = (e.clientY - height / 2) * 0.1;
+        });
+
+        window.addEventListener('click', (e) => {
+            // Ignore clicks on links or buttons
+            if (e.target.closest('a, button')) return;
+            
+            const mx = e.clientX - width / 2;
+            const my = e.clientY - height / 2;
+
+            planets.forEach(p => {
+                const dx = mx - p.rx;
+                const dy = my - p.ry;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                // Detect hit within planet radius + small padding
+                if (dist < p.size + 15) {
+                    showPlanetPopup(p.name, e.clientX, e.clientY);
+                }
+            });
         });
 
         window.addEventListener('resize', init);
