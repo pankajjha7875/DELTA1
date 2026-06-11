@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -29,16 +30,17 @@ app.get('/todo-game', (req, res) => {
     res.sendFile(path.join(__dirname, 'todo.html'));
 });
 
-mongoose.connect('mongodb://127.0.0.1:27017/portfolio')
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/portfolio';
+mongoose.connect(MONGODB_URI)
     .then(() => console.log('Connected to MongoDB Successfully'))
-    .catch(err => console.error('Database Connection Error:', err));
+    .catch(err => console.error('Database Connection Error:', err.message));
 
 // Schema definition to store contact messages
 const contactSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
     message: { type: String, required: true }
-});
+}, { timestamps: true });
 const Contact = mongoose.model('Contact', contactSchema);
 
 // Route to handle contact form submission
@@ -57,7 +59,7 @@ app.post('/api/contact', async (req, res) => {
 // Route to view all messages stored in the database
 app.get('/api/messages', async (req, res) => {
     try {
-        const messages = await Contact.find().sort({ date: -1 });
+        const messages = await Contact.find().sort({ createdAt: -1 });
         res.status(200).json(messages);
     } catch (error) {
         console.error('Error fetching messages:', error);
@@ -69,5 +71,5 @@ app.get('/api/messages', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Cinematic Portfolio running on http://localhost:${PORT|8080}`);
+    console.log(`Cinematic Portfolio running on http://localhost:${PORT}`);
 });

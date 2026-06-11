@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Messages</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container { padding: 50px 10%; }
+        .message-card { background: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #333; position: relative; }
+        .delete-btn { position: absolute; top: 20px; right: 20px; background: #ff4b2b; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .message-card small { color: var(--accent); display: block; margin-bottom: 10px; opacity: 0.8; }
+        .delete-btn:hover { background: #ff2b00; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1 class="section-title">Admin Messages</h1>
+        <div id="messages-list">Loading...</div>
+        <a href="index.html" class="btn">Back to Site</a>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = prompt("Enter Admin Password:");
+
+        async function fetchMessages() {
+            const list = document.getElementById('messages-list');
+            try {
+                const response = await fetch('/api/admin/messages', {
+                    headers: { 'x-admin-password': ADMIN_PASSWORD }
+                });
+                if (!response.ok) throw new Error('Unauthorized or missing password.');
+                const data = await response.json();
+                
+                list.innerHTML = data.length ? '' : 'No messages found.';
+                data.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'message-card';
+                    div.innerHTML = `
+                        <h3>${msg.name} (${msg.email})</h3>
+                        <small>${msg.createdAt ? new Date(msg.createdAt).toLocaleString() : 'Date Unknown'}</small>
+                        <p>${msg.message}</p>
+                        <button class="delete-btn" onclick="deleteMessage('${msg._id}')">Delete</button>
+                    `;
+                    list.appendChild(div);
+                });
+            } catch (err) {
+                list.innerText = "Error: " + err.message;
+            }
+        }
+
+        async function deleteMessage(id) {
+            if (!confirm("Are you sure you want to delete this message?")) return;
+            
+            try {
+                const response = await fetch(`/api/admin/messages/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'x-admin-password': ADMIN_PASSWORD }
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert("Deleted!");
+                    fetchMessages();
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (err) {
+                alert("Delete failed.");
+            }
+        }
+
+        if (ADMIN_PASSWORD) fetchMessages();
+    </script>
+</body>
+</html>
