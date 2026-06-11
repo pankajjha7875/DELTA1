@@ -24,6 +24,9 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="/" class="nav-brand">PANKAJ</a>
+            <div class="nav-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
@@ -43,7 +46,7 @@
 
     <section id="about" class="about-section">
         <div class="container">
-            <h2 class="section-title">The Architect</h2>
+            <h2 class="section-title architect-title">The Architect</h2>
             <div class="profile-img-container">
                 <img src="./my.jpg.jpeg" alt="Young man standing on a tree lined campus walkway with hands in his pockets, wearing a white shirt and tie, visible SANDIP text on his shirt and a PANKU heart watermark in the corner" class="profile-img">
             </div>
@@ -180,6 +183,16 @@
         });
     </script>
 
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        const menuToggle = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    </script>
+
     <!-- 3D Background Animation Script -->
     <script>
         const canvas = document.getElementById('bg-canvas');
@@ -191,12 +204,15 @@
             { name: "E-Commerce Web", dist: 350, size: 25, speed: 0.0005, color: '#f43f5e', angle: 0, rx: 0, ry: 0 },
             { name: "Canvas Sketchpad", dist: 500, size: 20, speed: 0.0003, color: '#fbbf24', angle: 0, rx: 0, ry: 0 }
         ];
-        let mouseX = 0, mouseY = 0;
+        let mouseX = 0, mouseY = 0, architectTitle;
         let popupTimeout;
+        let currentZoom = 1;
+        let shakeIntensity = 0;
         const STAR_COUNT = 400;
         const ACCENT_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#fbbf24';
 
         function init() {
+            architectTitle = document.querySelector('.architect-title');
             width = window.innerWidth;
             height = window.innerHeight;
             canvas.width = width;
@@ -214,13 +230,27 @@
         function draw() {
             ctx.fillStyle = '#0a0a0a';
             ctx.fillRect(0, 0, width, height);
+            
+            // Dynamic camera zoom: Creates a sense of diving into the cosmic space as you scroll
+            currentZoom = 1 + (window.scrollY * 0.0008);
+            const starWarp = window.scrollY * 0.002;
+
+            // Calculate Camera Shake
+            let shakeX = 0, shakeY = 0;
+            if (shakeIntensity > 0.1) {
+                shakeX = (Math.random() - 0.5) * shakeIntensity;
+                shakeY = (Math.random() - 0.5) * shakeIntensity;
+                shakeIntensity *= 0.9; // Decay the shake intensity
+            }
 
             ctx.save();
-            ctx.translate(width / 2, height / 2);
+            ctx.translate(width / 2 + shakeX, height / 2 + shakeY);
+            ctx.scale(currentZoom, currentZoom);
             
             // Draw Stars
             stars.forEach(s => {
-                s.z -= 0.5;
+                // Stars accelerate based on scroll depth for a cinematic warp effect
+                s.z -= (0.5 + starWarp);
                 if (s.z <= 0) s.z = width;
 
                 const x = (s.x - mouseX) * (width / s.z);
@@ -260,8 +290,9 @@
                 const px = Math.cos(currentAngle) * p.dist - mouseX;
                 const py = Math.sin(currentAngle) * (p.dist * 0.4) - mouseY; // Elliptical orbit
                 
-                p.rx = px; // Store screen coordinates for click detection
-                p.ry = py;
+                // Store screen coordinates adjusted for the current camera zoom
+                p.rx = px * currentZoom;
+                p.ry = py * currentZoom;
 
                 // Planet Shadow/Glow
                 ctx.shadowBlur = 15;
@@ -282,6 +313,18 @@
                 }
                 ctx.shadowBlur = 0;
             });
+
+            // Update Architect Title 3D Parallax & Pulse Glow
+            if (architectTitle) {
+                const rY = mouseX * 0.2; // Tilt based on mouse X
+                const rX = -mouseY * 0.2; // Tilt based on mouse Y
+                architectTitle.style.transform = `perspective(1000px) rotateX(${rX}deg) rotateY(${rY}deg) translateZ(40px)`;
+
+                // Dynamic Glow: Base glow + Sine wave pulse + Mouse activity flare
+                const pulse = Math.sin(Date.now() * 0.003) * 5;
+                const glowIntensity = 8 + pulse + (Math.abs(mouseX) + Math.abs(mouseY)) * 0.15;
+                architectTitle.style.textShadow = `0 0 ${glowIntensity}px var(--accent)`;
+            }
 
             ctx.restore();
             requestAnimationFrame(draw);
@@ -318,9 +361,10 @@
                 const dx = mx - p.rx;
                 const dy = my - p.ry;
                 const dist = Math.sqrt(dx*dx + dy*dy);
-                // Detect hit within planet radius + small padding
-                if (dist < p.size + 15) {
+                // Detect hit within the scaled planet radius + small padding
+                if (dist < (p.size * currentZoom) + 15) {
                     showPlanetPopup(p.name, e.clientX, e.clientY);
+                    shakeIntensity = 15; // Trigger the camera shake
                 }
             });
         });

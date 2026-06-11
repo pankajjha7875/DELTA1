@@ -66,6 +66,13 @@ body {
     padding: 0;
 }
 
+.nav-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
 .nav-links a {
     text-decoration: none;
     color: var(--text-main);
@@ -110,6 +117,12 @@ body {
     text-align: center;
     font-size: 2.5rem;
     margin: 50px 0;
+}
+
+.architect-title {
+    display: inline-block;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out, text-shadow 0.2s ease-out; /* Smooths out tracking and glow flaring */
 }
 
 .skills-grid {
@@ -260,7 +273,7 @@ body {
 /* Bio Section Styles */
 .about-section {
     padding: 80px 10%;
-    background: linear-gradient(180deg, #0a0a0a 0%, #111 100%);
+    background: transparent;
     text-align: center;
 }
 
@@ -276,6 +289,7 @@ body {
     margin-bottom: 30px;
     display: flex;
     justify-content: center;
+    perspective: 1000px; /* Enables 3D space for the child image */
 }
 
 .profile-img {
@@ -285,12 +299,19 @@ body {
     object-fit: cover;
     border: 3px solid var(--accent);
     box-shadow: 0 0 20px var(--accent);
-    transition: 0.3s;
+    transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    animation: float 4s ease-in-out infinite;
+    transform-style: preserve-3d;
 }
 
 .profile-img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px var(--accent);
+    transform: scale(1.1) rotateY(15deg) rotateX(10deg);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px var(--accent);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
 }
 
 .contact-section {
@@ -299,7 +320,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, #111 0%, #0a0a0a 100%);
+    background: transparent;
 }
 
 .contact-section .section-title {
@@ -345,6 +366,63 @@ body {
     align-items: center;
     gap: 25px;
     flex-wrap: wrap;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 1024px) {
+    .hero-content h1 { font-size: 4rem; letter-spacing: 8px; }
+    .nav-container { padding: 15px 5%; }
+}
+
+@media (max-width: 768px) {
+    .nav-toggle { display: block; }
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: rgba(10, 10, 10, 0.95);
+        padding: 20px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        gap: 20px;
+    }
+    .nav-links.active { display: flex; }
+    
+    .hero-content h1 { font-size: 3rem; letter-spacing: 5px; }
+    .subtitle { font-size: 1rem; }
+    
+    .section-title { font-size: 2rem; margin: 30px 0; }
+    
+    .skills-grid { gap: 15px; padding: 0 5%; }
+    .skill-card { width: 100px; padding: 15px; }
+    .skill-card i { font-size: 2rem; }
+    
+    .project-grid { 
+        grid-template-columns: 1fr; 
+        padding: 0 8% 50px; 
+    }
+    
+    .about-section, .contact-section { padding: 60px 5%; }
+    .profile-img { width: 150px; height: 150px; }
+    
+    .btn { padding: 14px 30px; font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 { font-size: 2.5rem; letter-spacing: 3px; }
+    .nav-brand { font-size: 1.2rem; }
+    
+    .game-container { padding: 20px; }
+    .game-choices { flex-wrap: wrap; }
+    
+    .contact-links { gap: 15px; }
+    .contact-links .btn { width: 100%; }
+    
+    /* Form inputs full width on mobile */
+    #contactForm input, #contactForm textarea { font-size: 16px; } /* Prevent iOS zoom */
 }
 
 footer {
