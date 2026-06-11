@@ -8,13 +8,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- SVG Liquid Filter -->
+    <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <canvas id="bg-canvas"></canvas>
     <nav class="navbar">
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+        <div class="nav-container">
+            <a href="/" class="nav-brand">PANKAJ</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
     </nav>
 
     <header class="hero">
@@ -59,13 +74,14 @@
             <a href="https://docs.github.com/" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about GitHub"><i class="fab fa-github"></i><span>GitHub</span></a>
             <a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about C"><i class="fas fa-code"></i><span>C</span></a>
             <a href="https://en.cppreference.com/w/cpp" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about C++"><i class="fas fa-code"></i><span>C++</span></a>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank" rel="noopener noreferrer" class="skill-card" title="Learn about Canvas API"><i class="fas fa-palette"></i><span>Canvas API</span></a>
         </div>
     </section>
 
     <section id="projects">
         <h2 class="section-title">Featured Projects</h2>
         <div class="project-grid">
-            <a href="./game.html" class="project-link">
+            <a href="/stone-paper-scissors" class="project-link">
                 <div class="project-card">
                     <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?auto=format&fit=crop&w=600&q=80')"></div>
                     <div class="project-info">
@@ -74,7 +90,7 @@
                     </div>
                 </div>
             </a>
-            <a href="./database.html" class="project-link">
+            <a href="/database-system" class="project-link">
                 <div class="project-card">
                     <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&w=600&q=80')"></div>
                     <div class="project-info">
@@ -83,7 +99,7 @@
                     </div>
                 </div>
             </a>
-            <a href="./ecommerce.html" class="project-link">
+            <a href="/ecommerce" class="project-link">
                 <div class="project-card">
                     <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=600&q=80')"></div>
                     <div class="project-info">
@@ -92,12 +108,21 @@
                     </div>
                 </div>
             </a>
-            <a href="./todo.html" class="project-link">
+            <a href="/todo-game" class="project-link">
                 <div class="project-card">
                     <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1540350394557-8d14678e7f91?auto=format&fit=crop&w=600&q=80')"></div>
                     <div class="project-info">
                         <h3>Todo Game</h3>
                         <p>Gamified Task Manager</p>
+                    </div>
+                </div>
+            </a>
+            <a href="/canvas-sketch" class="project-link">
+                <div class="project-card">
+                    <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80')"></div>
+                    <div class="project-info">
+                        <h3>Canvas Sketchpad</h3>
+                        <p>Interactive Drawing Tool</p>
                     </div>
                 </div>
             </a>
@@ -147,8 +172,135 @@
                     e.target.reset();
                 }
             } catch (err) {
+                console.error("Fetch error:", err);
                 status.style.color = "#ff4b2b";
                 status.innerText = "Transmission failed. Is the server running?";
+            }
+        });
+    </script>
+
+    <!-- 3D Background Animation Script -->
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height, stars = [];
+        let planets = [
+            { dist: 200, size: 15, speed: 0.001, color: '#4facfe', angle: 0 },
+            { dist: 350, size: 25, speed: 0.0005, color: '#f43f5e', angle: 0 },
+            { dist: 500, size: 20, speed: 0.0003, color: '#fbbf24', angle: 0 }
+        ];
+        let mouseX = 0, mouseY = 0;
+        const STAR_COUNT = 400;
+        const ACCENT_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#fbbf24';
+
+        function init() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            stars = [];
+            for (let i = 0; i < STAR_COUNT; i++) {
+                stars.push({
+                    x: Math.random() * width - width / 2,
+                    y: Math.random() * height - height / 2,
+                    z: Math.random() * width
+                });
+            }
+        }
+
+        function draw() {
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.save();
+            ctx.translate(width / 2, height / 2);
+            
+            // Draw Stars
+            stars.forEach(s => {
+                s.z -= 0.5;
+                if (s.z <= 0) s.z = width;
+
+                const x = (s.x - mouseX) * (width / s.z);
+                const y = (s.y - mouseY) * (width / s.z);
+                const size = (1 - s.z / width) * 2;
+                const alpha = (1 - s.z / width);
+
+                ctx.fillStyle = '#fff';
+                ctx.globalAlpha = alpha;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw Moon
+            const moonX = -width * 0.3 - mouseX;
+            const moonY = -height * 0.2 - mouseY;
+            const moonGlow = ctx.createRadialGradient(moonX, moonY, 10, moonX, moonY, 60);
+            moonGlow.addColorStop(0, '#fff');
+            moonGlow.addColorStop(0.5, 'rgba(251, 191, 36, 0.2)');
+            moonGlow.addColorStop(1, 'transparent');
+            
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = moonGlow;
+            ctx.beginPath();
+            ctx.arc(moonX, moonY, 60, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(moonX, moonY, 40, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Planets orbiting based on Scroll
+            const scrollFactor = window.scrollY * 0.005;
+            planets.forEach((p, index) => {
+                const currentAngle = p.angle + scrollFactor + (Date.now() * p.speed);
+                const px = Math.cos(currentAngle) * p.dist - mouseX;
+                const py = Math.sin(currentAngle) * (p.dist * 0.4) - mouseY; // Elliptical orbit
+                
+                // Planet Shadow/Glow
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = p.color;
+                ctx.fillStyle = p.color;
+                
+                ctx.beginPath();
+                ctx.arc(px, py, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Planet Ring (for one planet)
+                if (index === 2) {
+                    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.ellipse(px, py, p.size * 2, p.size * 0.5, currentAngle, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+                ctx.shadowBlur = 0;
+            });
+
+            ctx.restore();
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - width / 2) * 0.1;
+            mouseY = (e.clientY - height / 2) * 0.1;
+        });
+
+        window.addEventListener('resize', init);
+        init();
+        draw();
+    </script>
+
+    <!-- Liquid Button Sound Effect -->
+    <script>
+        const bubbleSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-water-bubble-612.mp3');
+        bubbleSound.volume = 0.3; // Subtle volume
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.btn, .choice-btn, .skill-card')) {
+                bubbleSound.currentTime = 0; // Reset for rapid clicks
+                bubbleSound.play().catch(() => {}); // Play sound
             }
         });
     </script>

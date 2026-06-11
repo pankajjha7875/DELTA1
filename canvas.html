@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Sketchpad | Project</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .canvas-container { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid #333; margin: 50px auto; max-width: 800px; text-align: center; }
+        canvas { background: #fff; border-radius: 10px; cursor: crosshair; touch-action: none; max-width: 100%; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .controls { margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    </style>
+</head>
+<body class="game-body">
+    <div class="canvas-container">
+        <h1 class="section-title">Canvas Sketchpad</h1>
+        <canvas id="sketchpad" width="600" height="400"></canvas>
+        <div class="controls">
+            <input type="color" id="colorPicker" value="#00f2fe" class="db-input" title="Select Color">
+            <input type="range" id="sizePicker" min="1" max="50" value="5" title="Brush Size">
+            <button class="choice-btn" onclick="clearCanvas()">Clear Board</button>
+            <a href="/index.html" class="btn">Back to Portfolio</a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('sketchpad');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function startPosition(e) {
+            drawing = true;
+            draw(e);
+        }
+
+        function finishedPosition() {
+            drawing = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+            ctx.lineWidth = document.getElementById('sizePicker').value;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = document.getElementById('colorPicker').value;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', finishedPosition);
+        canvas.addEventListener('mousemove', draw);
+        
+        // Mobile Support
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startPosition(e);
+        });
+        canvas.addEventListener('touchend', finishedPosition);
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            draw(e);
+        });
+    </script>
+</body>
+</html>

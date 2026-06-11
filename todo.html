@@ -108,5 +108,15 @@
             if (e.key === 'Enter') addQuest();
         });
     </script>
+    <script>
+        const bubbleSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-water-bubble-612.mp3');
+        bubbleSound.volume = 0.3;
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.choice-btn, .btn, .check-btn, .del-btn')) {
+                bubbleSound.currentTime = 0;
+                bubbleSound.play().catch(() => {});
+            }
+        });
+    </script>
 </body>
 </html>

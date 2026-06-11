@@ -28,12 +28,17 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.get(['/', '/index.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 const pages = {
     '/stone-paper-scissors': 'game.html',
     '/database-system': 'database.html',
     '/ecommerce': 'ecommerce.html',
     '/todo-game': 'todo.html',
-    '/admin': 'admin.html'
+    '/admin': 'admin.html',
+    '/canvas-sketch': 'canvas.html'
 };
 
 Object.entries(pages).forEach(([route, file]) => {
@@ -79,6 +84,7 @@ app.post('/api/contact', async (req, res) => {
         await contact.save();
         res.status(200).json({ success: true, message: 'Data saved to Cloud MongoDB!' });
     } catch (err) {
+        console.error('API Error:', err.message);
         res.status(500).json({ success: false, error: err.message });
     }
 });

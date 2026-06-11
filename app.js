@@ -7,27 +7,27 @@ const app = express();
 // Middleware
 app.use(express.urlencoded({ extended: true })); // Middleware to parse form data
 app.use(express.json()); // Middleware to parse JSON data
-app.use(express.static(path.join(__dirname))); // Serve all static files from root
+app.use(express.static(path.join(__dirname, 'public'))); // Serve all static files from public folder
 
 // Routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/stone-paper-scissors', (req, res) => {
-    res.sendFile(path.join(__dirname, 'game.html'));
+    res.sendFile(path.join(__dirname, 'public', 'game.html'));
 });
 
 app.get('/database-system', (req, res) => {
-    res.sendFile(path.join(__dirname, 'database.html'));
+    res.sendFile(path.join(__dirname, 'public', 'database.html'));
 });
 
 app.get('/ecommerce', (req, res) => {
-    res.sendFile(path.join(__dirname, 'ecommerce.html'));
+    res.sendFile(path.join(__dirname, 'public', 'ecommerce.html'));
 });
 
 app.get('/todo-game', (req, res) => {
-    res.sendFile(path.join(__dirname, 'todo.html'));
+    res.sendFile(path.join(__dirname, 'public', 'todo.html'));
 });
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/portfolio';
