@@ -351,22 +351,26 @@
         });
 
         window.addEventListener('click', (e) => {
-            // Ignore clicks on links or buttons
-            if (e.target.closest('a, button')) return;
-            
-            const mx = e.clientX - width / 2;
-            const my = e.clientY - height / 2;
+            try {
+                // Ignore clicks on links or buttons
+                if (e.target.closest('a, button')) return;
+                
+                const mx = e.clientX - width / 2;
+                const my = e.clientY - height / 2;
 
-            planets.forEach(p => {
-                const dx = mx - p.rx;
-                const dy = my - p.ry;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                // Detect hit within the scaled planet radius + small padding
-                if (dist < (p.size * currentZoom) + 15) {
-                    showPlanetPopup(p.name, e.clientX, e.clientY);
-                    shakeIntensity = 15; // Trigger the camera shake
-                }
-            });
+                planets.forEach(p => {
+                    const dx = mx - p.rx;
+                    const dy = my - p.ry;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    // Detect hit within the scaled planet radius + small padding
+                    if (dist < (p.size * currentZoom) + 15) {
+                        showPlanetPopup(p.name, e.clientX, e.clientY);
+                        shakeIntensity = 15; // Trigger the camera shake
+                    }
+                });
+            } catch (error) {
+                console.error("Error handling planet click:", error);
+            }
         });
 
         window.addEventListener('resize', init);

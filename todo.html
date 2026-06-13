@@ -64,42 +64,54 @@
         let level = 1;
 
         function updateStats(points) {
-            xp += points;
-            if (xp >= 100) {
-                xp = xp - 100;
-                level++;
-                alert("LEVEL UP! You are now Level " + level);
+            try {
+                xp += points;
+                if (xp >= 100) {
+                    xp = xp - 100;
+                    level++;
+                    alert("LEVEL UP! You are now Level " + level);
+                }
+                document.getElementById('xp').innerText = xp;
+                document.getElementById('level').innerText = level;
+                document.getElementById('xp-fill').style.width = xp + "%";
+            } catch (error) {
+                console.error("Error updating stats:", error);
             }
-            document.getElementById('xp').innerText = xp;
-            document.getElementById('level').innerText = level;
-            document.getElementById('xp-fill').style.width = xp + "%";
         }
 
         function addQuest() {
-            const input = document.getElementById('quest-input');
-            const text = input.value.trim();
-            if (!text) return;
+            try {
+                const input = document.getElementById('quest-input');
+                const text = input.value.trim();
+                if (!text) return;
 
-            const list = document.getElementById('quest-list');
-            const li = document.createElement('li');
-            li.className = 'todo-item';
-            li.innerHTML = `
-                <span>${text}</span>
-                <div class="action-btns">
-                    <i class="fas fa-check-circle check-btn" onclick="completeQuest(this)"></i>
-                    <i class="fas fa-trash del-btn" onclick="this.parentElement.parentElement.remove()"></i>
-                </div>
-            `;
-            list.appendChild(li);
-            input.value = '';
+                const list = document.getElementById('quest-list');
+                const li = document.createElement('li');
+                li.className = 'todo-item';
+                li.innerHTML = `
+                    <span>${text}</span>
+                    <div class="action-btns">
+                        <i class="fas fa-check-circle check-btn" onclick="completeQuest(this)"></i>
+                        <i class="fas fa-trash del-btn" onclick="this.parentElement.parentElement.remove()"></i>
+                    </div>
+                `;
+                list.appendChild(li);
+                input.value = '';
+            } catch (error) {
+                console.error("Error adding quest:", error);
+            }
         }
 
         function completeQuest(btn) {
-            const item = btn.parentElement.parentElement;
-            if (!item.classList.contains('completed')) {
-                item.classList.add('completed');
-                updateStats(25); // Earn 25 XP per quest
-                btn.style.display = 'none';
+            try {
+                const item = btn.parentElement.parentElement;
+                if (!item.classList.contains('completed')) {
+                    item.classList.add('completed');
+                    updateStats(25); // Earn 25 XP per quest
+                    btn.style.display = 'none';
+                }
+            } catch (error) {
+                console.error("Error completing quest:", error);
             }
         }
 

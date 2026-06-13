@@ -28,25 +28,29 @@
 
     <script>
         function play(userChoice) {
-            const choices = ['stone', 'paper', 'scissors'];
-            const compChoice = choices[Math.floor(Math.random() * 3)];
+            try {
+                const choices = ['stone', 'paper', 'scissors'];
+                const compChoice = choices[Math.floor(Math.random() * 3)];
 
-            document.getElementById('user-display').innerText = userChoice.toUpperCase();
-            document.getElementById('comp-display').innerText = compChoice.toUpperCase();
+                document.getElementById('user-display').innerText = userChoice.toUpperCase();
+                document.getElementById('comp-display').innerText = compChoice.toUpperCase();
 
-            let result = "";
-            if (userChoice === compChoice) {
-                result = "It's a Tie! 🤝";
-            } else if (
-                (userChoice === 'stone' && compChoice === 'scissors') ||
-                (userChoice === 'paper' && compChoice === 'stone') ||
-                (userChoice === 'scissors' && compChoice === 'paper')
-            ) {
-                result = "You Win! 🎉";
-            } else {
-                result = "You Lose! 💀";
+                let result = "";
+                if (userChoice === compChoice) {
+                    result = "It's a Tie! 🤝";
+                } else if (
+                    (userChoice === 'stone' && compChoice === 'scissors') ||
+                    (userChoice === 'paper' && compChoice === 'stone') ||
+                    (userChoice === 'scissors' && compChoice === 'paper')
+                ) {
+                    result = "You Win! 🎉";
+                } else {
+                    result = "You Lose! 💀";
+                }
+                document.getElementById('game-result').innerText = result;
+            } catch (error) {
+                console.error("Error during game play:", error);
             }
-            document.getElementById('game-result').innerText = result;
         }
     </script>
     <script>

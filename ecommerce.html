@@ -77,15 +77,19 @@
     <script>
         let count = 0;
         function addToCart() {
-            count++;
-            const qtyLabel = document.getElementById('cart-qty');
-            qtyLabel.innerText = count;
-            
-            // Animation effect for cart
-            qtyLabel.style.transform = "scale(1.5)";
-            setTimeout(() => {
-                qtyLabel.style.transform = "scale(1)";
-            }, 200);
+            try {
+                count++;
+                const qtyLabel = document.getElementById('cart-qty');
+                qtyLabel.innerText = count;
+                
+                // Animation effect for cart
+                qtyLabel.style.transform = "scale(1.5)";
+                setTimeout(() => {
+                    qtyLabel.style.transform = "scale(1)";
+                }, 200);
+            } catch (error) {
+                console.error("Error adding to cart:", error);
+            }
         }
     </script>
 </body>

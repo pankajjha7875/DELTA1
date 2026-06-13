@@ -46,20 +46,24 @@
 
     <script>
         function addRecord() {
-            const input = document.getElementById('record-input');
-            const recordName = input.value.trim();
-            
-            if (!recordName) return alert("Please enter a record name!");
+            try {
+                const input = document.getElementById('record-input');
+                const recordName = input.value.trim();
+                
+                if (!recordName) return alert("Please enter a record name!");
 
-            const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
-            const id = Math.floor(Math.random() * 900) + 100;
-            newRow.innerHTML = `
-                <td>#${id}</td>
-                <td>${recordName}</td>
-                <td style="color: var(--accent)">Synchronizing</td>
-            `;
-            input.value = ''; // Clear input field after adding
+                const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+                const id = Math.floor(Math.random() * 900) + 100;
+                newRow.innerHTML = `
+                    <td>#${id}</td>
+                    <td>${recordName}</td>
+                    <td style="color: var(--accent)">Synchronizing</td>
+                `;
+                input.value = ''; // Clear input field after adding
+            } catch (error) {
+                console.error("Error adding record:", error);
+            }
         }
     </script>
 </body>
