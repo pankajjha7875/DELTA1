@@ -1,4 +1,13 @@
-require('dotenv').config();
+try {
+    require('dotenv').config();
+} catch (err) {
+    if (err.code === 'MODULE_NOT_FOUND') {
+        console.error('❌ ERROR: The "dotenv" module is missing. Please run: npm install dotenv');
+    } else {
+        console.error('❌ ERROR loading environment configuration:', err.message);
+    }
+    process.exit(1);
+}
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
