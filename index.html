@@ -135,7 +135,7 @@
 <section id="contact" class="contact-section">
         <h2 class="section-title">Get In Touch</h2>
         <div class="container" style="max-width: 600px; width: 100%; margin-bottom: 40px;">
-            <form id="contactForm" style="display: flex; flex-direction: column; gap: 15px;">
+            <form id="contactForm" action="mailto:pankajjha7870@gmail.com" method="POST" enctype="text/plain" style="display: flex; flex-direction: column; gap: 15px;">
                 <input type="text" name="name" placeholder="Your Name" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;">
                 <input type="email" name="email" placeholder="Your Email" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;">
                 <textarea name="message" placeholder="Describe your project..." rows="5" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;"></textarea>
@@ -143,45 +143,7 @@
             </form>
             <div id="formStatus" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
         </div>
-
-        <div class="contact-links">
-            <a href="https://github.com/pankajjha7875" target="_blank" class="btn"><i class="fab fa-github"></i> GitHub</a>
-            <a href="mailto:pankajjha7870@gmail.com" class="btn"><i class="fas fa-envelope"></i> Email</a>
-            <a href="https://www.linkedin.com/in/pankaj-jha" target="_blank" class="btn"><i class="fab fa-linkedin"></i> LinkedIn</a>
-        </div>
-    </section>
-
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const status = document.getElementById('formStatus');
-            const formData = {
-                name: e.target.name.value,
-                email: e.target.email.value,
-                message: e.target.message.value
-            };
-
-            status.innerText = "Transmitting...";
-
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                const result = await response.json();
-                if (result.success) {
-                    status.style.color = "var(--accent)";
-                    status.innerText = "Message received and stored in database.";
-                    e.target.reset();
-                }
-            } catch (err) {
-                console.error("Fetch error:", err);
-                status.style.color = "#ff4b2b";
-                status.innerText = "Transmission failed. Is the server running?";
-            }
-        });
-    </script>
+        <!-- The existing contact links are fine as they are -->
 
     <!-- Mobile Menu Toggle Script -->
     <script>
