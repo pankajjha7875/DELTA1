@@ -135,7 +135,7 @@
 <section id="contact" class="contact-section">
         <h2 class="section-title">Get In Touch</h2>
         <div class="container" style="max-width: 600px; width: 100%; margin-bottom: 40px;">
-            <form id="contactForm" action="mailto:pankajjha7870@gmail.com" method="POST" enctype="text/plain" style="display: flex; flex-direction: column; gap: 15px;">
+            <form id="contactForm" style="display: flex; flex-direction: column; gap: 15px;">
                 <input type="text" name="name" placeholder="Your Name" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;">
                 <input type="email" name="email" placeholder="Your Email" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;">
                 <textarea name="message" placeholder="Describe your project..." rows="5" required style="padding: 15px; border-radius: 10px; border: 1px solid #333; background: var(--card-bg); color: white;"></textarea>
@@ -143,20 +143,59 @@
             </form>
             <div id="formStatus" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
         </div>
-        <!-- The existing contact links are fine as they are -->
+        <div class="contact-links">
+            <a href="https://github.com/pankajjha7875" target="_blank" class="btn"><i class="fab fa-github"></i> GitHub</a>
+            <a href="mailto:pankajjha7870@gmail.com" class="btn"><i class="fas fa-envelope"></i> Email</a>
+            <a href="https://www.linkedin.com/in/pankaj-jha" target="_blank" class="btn"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        </div>
+    </section>
 
-    <!-- Mobile Menu Toggle Script -->
     <script>
+        // IMPORTANT: Replace with the actual URL of your deployed backend
+        const BACKEND_URL = 'https://your-backend-name.onrender.com'; 
+
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const status = document.getElementById('formStatus');
+            const formData = {
+                name: e.target.name.value,
+                email: e.target.email.value,
+                message: e.target.message.value
+            };
+
+            status.innerText = "Transmitting...";
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/contact`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    status.style.color = "var(--accent)";
+                    status.innerText = "Message received. Thank you!";
+                    e.target.reset();
+                } else {
+                    status.style.color = "#ff4b2b";
+                    status.innerText = result.message || "Transmission failed. Please try again.";
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+                status.style.color = "#ff4b2b";
+                status.innerText = "Transmission failed. Server might be down or unreachable.";
+            }
+        });
+
+        // Mobile Menu Toggle Script
         const menuToggle = document.getElementById('mobile-menu');
         const navLinks = document.querySelector('.nav-links');
 
         menuToggle.addEventListener('click', () => {
             navLinks.classList.toggle('active');
         });
-    </script>
 
-    <!-- 3D Background Animation Script -->
-    <script>
+        // 3D Background Animation Script
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         
@@ -341,7 +380,7 @@
     </script>
 
     <!-- Liquid Button Sound Effect -->
-    <script>
+    <script> // This script should be placed after the main scripts to ensure elements are loaded
         const bubbleSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-water-bubble-612.mp3');
         bubbleSound.volume = 0.3; // Subtle volume
 

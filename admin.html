@@ -21,12 +21,14 @@
     </div>
 
     <script>
+        // IMPORTANT: Replace with the actual URL of your deployed backend
+        const BACKEND_URL = 'https://your-backend-name.onrender.com'; 
         const ADMIN_PASSWORD = prompt("Enter Admin Password:");
 
         async function fetchMessages() {
             const list = document.getElementById('messages-list');
             try {
-                const response = await fetch('/api/admin/messages', {
+                const response = await fetch(`${BACKEND_URL}/api/admin/messages`, {
                     headers: { 'x-admin-password': ADMIN_PASSWORD }
                 });
                 if (!response.ok) throw new Error('Unauthorized or missing password.');
